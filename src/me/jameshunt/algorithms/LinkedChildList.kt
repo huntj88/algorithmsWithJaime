@@ -2,6 +2,13 @@ package me.jameshunt.algorithms
 
 class LinkedChildList<T> {
 
+    data class Node<T>(
+        val previous: Node<T>?,
+        var next: Node<T>?,
+        var child: Node<T>?,
+        val value: T
+    )
+
     private var head: Node<T>? = null
 
     val size: Int
@@ -61,10 +68,7 @@ class LinkedChildList<T> {
 
     fun flatten(): List<T> = head?.flatten() ?: emptyList()
 
-    fun Node<T>.flatten(): List<T> {
-
-        return listOf(this.value) +
-                (this.child?.flatten()?: emptyList()) +
-                (this.next?.flatten() ?: emptyList())
-    }
+    private fun Node<T>.flatten(): List<T> = listOf(this.value) +
+            (this.child?.flatten() ?: emptyList()) +
+            (this.next?.flatten() ?: emptyList())
 }

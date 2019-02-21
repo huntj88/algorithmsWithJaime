@@ -49,11 +49,3 @@ fun main(vararg cows: String) {
     println(list.flatten())
 
 }
-
-
-data class Node<T>(
-    val previous: Node<T>?,
-    var next: Node<T>?,
-    var child: Node<T>?,
-    val value: T
-)
