@@ -1,4 +1,4 @@
-package me.jameshunt.algorithms
+package me.jameshunt.algorithms.linkedchild
 
 class LinkedChildList<T> {
 

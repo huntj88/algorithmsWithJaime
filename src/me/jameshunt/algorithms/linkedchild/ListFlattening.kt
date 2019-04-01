@@ -1,6 +1,12 @@
-package me.jameshunt.algorithms
+package me.jameshunt.algorithms.linkedchild
 
 fun main(vararg cows: String) {
+
+//    linkedChildList<Int> {
+//        insert(5).also {
+//            child {  }
+//        }
+//    }
 
     val list = LinkedChildList<Int>()
 
