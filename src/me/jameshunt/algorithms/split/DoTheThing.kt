@@ -17,33 +17,40 @@ fun main() {
     val s1CharSizeMap = s1.mapCharSize()
     val s2CharSizeMap = s2.mapCharSize()
 
-    val allChars = s1CharSizeMap.keys + s2CharSizeMap.keys
+    val uniqueChars = s1CharSizeMap.keys + s2CharSizeMap.keys
 
-    val output = allChars
-        .map {
-            val first = s1CharSizeMap[it] ?: 0
-            val second = s2CharSizeMap[it] ?: 0
+    val output = uniqueChars
+        .map { char ->
+            val s1Size = s1CharSizeMap[char] ?: 0
+            val s2Size = s2CharSizeMap[char] ?: 0
 
             when {
-                first == second -> "=:" to it.repeat(first)
-                first > second -> "1:" to it.repeat(first)
-                else -> "2:" to it.repeat(second)
+                s1Size == s2Size -> Pair("=", char.repeat(s1Size))
+                s1Size > s2Size -> Pair("1", char.repeat(s1Size))
+                else -> Pair("2", char.repeat(s2Size))
             }
         }
-        .groupBy { !it.first.contains('=') }
-        .mapValues {
-            it.value.sortedWith(Comparator { o1, o2 ->
-                if(o1.second.length == o2.second.length) {
-                    o1.second.first() - o2.second.first()
-                } else {
-                    o2.second.length - o1.second.length
-                }
-            })
-        }
-        .let { (it[true]?: emptyList()) + (it[false]?: emptyList()) }
-        .map { (a, b) -> a + b }
+        .sortWithEqualsLast()
         .fold("") { acc, s -> "$acc$s/" }
         .let { it.substring(0, it.length - 1) }
 
     println(output)
+}
+
+fun List<Pair<String, String>>.sortWithEqualsLast(): List<String> {
+    val equal = true
+    val notEqual = false
+
+    return this
+        .groupBy { it.first == "=" }
+        .mapValues {
+            it.value.sortedWith(Comparator { o1, o2 ->
+                when(o1.second.length == o2.second.length) {
+                    true -> o1.second.first() - o2.second.first()
+                    false -> o2.second.length - o1.second.length
+                }
+            })
+        }
+        .let { (it[notEqual]?: emptyList()) + (it[equal]?: emptyList()) }
+        .map { (a, b) -> "$a:$b" }
 }
